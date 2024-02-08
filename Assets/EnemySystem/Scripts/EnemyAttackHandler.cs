@@ -11,7 +11,12 @@ public class EnemyAttackHandler : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
     public void Shoot(Transform target){
+        // Stop moving
         navMeshAgent.velocity = Vector3.zero;
-        Debug.Log($"Shoot to {target.name}");
+        // Look Towards The Target
+        transform.rotation = Quaternion.LookRotation(target.position - transform.position);
+
+        // ShootingLogicHere
     }
+
 }
