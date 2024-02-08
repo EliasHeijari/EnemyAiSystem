@@ -70,4 +70,13 @@ public class EnemyHandler : MonoBehaviour
         }
         return false;
     }
+
+    private void OnDrawGizmosSelected() {
+        // Draw a yellow sphere, chase Range
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(transform.position, chaseRange);
+        // Draw a red sphere, attack Range
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(transform.position, attackRange);
+    }
 }

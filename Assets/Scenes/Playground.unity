@@ -908,7 +908,7 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
-  player: {fileID: 1353508282}
+  target: {fileID: 1353508282}
   chaseRange: 8
   attackRange: 4
 --- !u!114 &1583951756
