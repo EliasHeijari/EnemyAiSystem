@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -19,6 +20,7 @@ public class EnemyHandler : MonoBehaviour
     [SerializeField] private float attackRange = 4f;
     [SerializeField] private float minimumDetectionRadiusAngle = -40f;
     [SerializeField] private float maximumDetectionRadiusAngle = 65f;
+    Vector3 playerLastSeenPos;
     private void Start() {
         enemy = GetComponent<Enemy>();
         attackHandler = GetComponent<EnemyAttackHandler>();
@@ -28,7 +30,7 @@ public class EnemyHandler : MonoBehaviour
         UpdateState();
         switch(state){
             case State.Patrol:
-                movementHandler.Patrol();
+                movementHandler.Patrol(); 
                 break;
             case State.Chase:
                 movementHandler.Chase(Player.Instance.transform);
@@ -36,35 +38,40 @@ public class EnemyHandler : MonoBehaviour
             case State.Attack:
                 attackHandler.Shoot(Player.Instance.transform);
                 break;
-        } 
-        Debug.Log(state.ToString());
+        }
+        if (playerLastSeenPos != Vector3.zero)
+            movementHandler.MoveTo(playerLastSeenPos);
     }
 
     private void UpdateState()
     {
-        if (TargetOnChaseRange() && IsPlayerOnSight())
+        if (PlayerOnChaseRange() && IsPlayerOnSight())
         {
             state = State.Chase;
-            if (TargetOnAttackRange())
+            if (PlayerOnAttackRange())
             {
                 state = State.Attack;
             }
         }
         else
         {
+            if (state == State.Chase || state == State.Attack)
+                playerLastSeenPos = Player.Instance.transform.position;
+            else playerLastSeenPos = Vector3.zero;
+
             state = State.Patrol;
         }
 
     }
 
-    private bool TargetOnChaseRange(){
+    private bool PlayerOnChaseRange(){
         if (Physics.CheckSphere(transform.position, chaseRange, playerLayer))
         {
             return true; 
         }
         return false;
     }
-    private bool TargetOnAttackRange(){
+    private bool PlayerOnAttackRange(){
         if (Physics.CheckSphere(transform.position, attackRange, playerLayer))
         {
             return true; 
@@ -90,6 +97,7 @@ public class EnemyHandler : MonoBehaviour
 
         return isOnSight;
     }
+
 
     private void OnDrawGizmosSelected() {
         // Draw a yellow sphere, chase Range
