@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageable
 {
+    private int health;
+    public static event EventHandler OnEnemyDie;
     public NavMeshAgent navMeshAgent {get; private set;}
     [SerializeField] private Transform[] patrolPoints;
     public Vector3[] PatrolPoints 
@@ -22,4 +26,21 @@ public class Enemy : MonoBehaviour
     private void Start() {
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
+
+    public void TakeDamage(int damage){
+        health -= damage;
+        if (health <= 0)
+            health = 0;
+            Die();
+    }
+
+    private void Die()
+    {
+        OnEnemyDie?.Invoke(this, EventArgs.Empty);
+
+        // Death Logic
+        Destroy(gameObject);
+    }
+
+
 }
