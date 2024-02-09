@@ -1121,8 +1121,8 @@ MonoBehaviour:
     m_Bits: 64
   chaseRange: 23
   attackRange: 10
-  minimumDetectionRadiusAngle: -40
-  maximumDetectionRadiusAngle: 65
+  minimumDetectionRadiusAngle: -50
+  maximumDetectionRadiusAngle: 70
 --- !u!114 &1583951756
 MonoBehaviour:
   m_ObjectHideFlags: 0

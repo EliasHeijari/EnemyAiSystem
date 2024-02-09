@@ -11,16 +11,24 @@ public class EnemyHandler : MonoBehaviour
         Chase,
         Attack
     }
-    Enemy enemy;
     State state;
-    [SerializeField] LayerMask playerLayer;
+    Enemy enemy;
     EnemyAttackHandler attackHandler;
     EnemyMovementHandler movementHandler;
+
+    [Header("Detection Settings")]
+    [Space(15)]
+    [SerializeField] LayerMask playerLayer;
     [SerializeField] private float chaseRange = 8f;
     [SerializeField] private float attackRange = 4f;
     [SerializeField] private float minimumDetectionRadiusAngle = -40f;
     [SerializeField] private float maximumDetectionRadiusAngle = 65f;
+
     Vector3 playerLastSeenPos;
+
+    // For Drawing Gizmos
+    Vector3 lastSeenPosDraw;
+    
     private void Start() {
         enemy = GetComponent<Enemy>();
         attackHandler = GetComponent<EnemyAttackHandler>();
@@ -56,7 +64,10 @@ public class EnemyHandler : MonoBehaviour
         else
         {
             if (state == State.Chase || state == State.Attack)
+            {
                 playerLastSeenPos = Player.Instance.transform.position;
+                lastSeenPosDraw = playerLastSeenPos;
+            }
             else playerLastSeenPos = Vector3.zero;
 
             state = State.Patrol;
@@ -106,5 +117,9 @@ public class EnemyHandler : MonoBehaviour
         // Draw a red sphere, attack Range
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position, attackRange);
+    }
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(lastSeenPosDraw, 1f);
     }
 }

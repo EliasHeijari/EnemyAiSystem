@@ -22,16 +22,13 @@ public class EnemyMovementHandler : MonoBehaviour
 
     public void Chase(Transform target)
     {
-        if (!isMovingTo)
+        if (Vector3.Distance(transform.position, target.position) > 1f)
         {
-            if (Vector3.Distance(transform.position, target.position) > 1f)
-            {
-            if (navMeshAgent.destination != target.position)
-                navMeshAgent.SetDestination(target.position);
-            }
-            else {
-                navMeshAgent.velocity = Vector3.zero;
-            }
+        if (navMeshAgent.destination != target.position)
+            navMeshAgent.SetDestination(target.position);
+        }
+        else {
+            navMeshAgent.velocity = Vector3.zero;
         }
     }
 
@@ -50,7 +47,7 @@ public class EnemyMovementHandler : MonoBehaviour
     }
 
     /// <summary>
-    /// move to given postion and ignores Patrol and Chase Methods even When they are called
+    /// move to given postion and ignores Patrol even when it's called
     /// </summary>
     /// <param name="position"></param>
     public void MoveTo(Vector3 position)
