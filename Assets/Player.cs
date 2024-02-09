@@ -15,8 +15,9 @@ public class Player : MonoBehaviour, IDamageable
             Instance = this;
         }
         else if(Instance != this){
-            Destroy(this);
+            Destroy(this.gameObject);
         }
+
         DontDestroyOnLoad(this);
     }
 

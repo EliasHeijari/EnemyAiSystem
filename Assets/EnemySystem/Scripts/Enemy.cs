@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 public class Enemy : MonoBehaviour, IDamageable
 {
     private int health;
+    public int damage { get; private set; } = 8;
     public static event EventHandler OnEnemyDie;
     public NavMeshAgent navMeshAgent {get; private set;}
     [SerializeField] private Transform[] patrolPoints;
