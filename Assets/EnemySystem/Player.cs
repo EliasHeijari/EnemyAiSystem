@@ -7,7 +7,7 @@ public class Player : MonoBehaviour, IDamageable
 {
     public static Player Instance;
 
-    private int health;
+    private int health = 100;
     private void Start()
     {
         if (Instance == null)
@@ -34,6 +34,6 @@ public class Player : MonoBehaviour, IDamageable
     private void Die()
     {
         // Dying logic here
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Debug.Log("Player Died");
     }
 }

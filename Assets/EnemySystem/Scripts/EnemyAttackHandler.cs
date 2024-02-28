@@ -19,9 +19,8 @@ public class EnemyAttackHandler : MonoBehaviour
     public void Shoot(Transform target){
         // Stop moving
         navMeshAgent.velocity = Vector3.zero;
-        Quaternion targetRotation = Quaternion.LookRotation(target.position - transform.position);
-        // Look Towards The Target
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, shootRotationSpeed * Time.deltaTime);
+
+        RotateTowardsTarget(target);
 
         // ShootingLogicHere
         if ( Physics.Raycast(shootingPoint.position, shootingPoint.forward, out RaycastHit hit, shootingDistance) )
@@ -33,7 +32,13 @@ public class EnemyAttackHandler : MonoBehaviour
                 Debug.Log("Hitted damageable object");
             }
         }
+    }
 
+    private void RotateTowardsTarget(Transform target)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(target.position - transform.position);
+        // Look Towards The Target
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, shootRotationSpeed * Time.deltaTime);
 
     }
 
