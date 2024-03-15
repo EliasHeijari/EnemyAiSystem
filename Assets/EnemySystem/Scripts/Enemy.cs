@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour, IDamageable
             return points;
         }
     }
-    private void Start() {
+    private void Awake() {
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour, IDamageable
         OnEnemyDie?.Invoke(this, EventArgs.Empty);
 
         // Death Logic
-        Destroy(gameObject);
+        Debug.Log("enemy died");
     }
 
 

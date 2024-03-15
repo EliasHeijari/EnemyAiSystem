@@ -181,7 +181,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   chaseRange: 23
-  attackRange: 10
+  attackRange: 1.5
+  attackRangeOffset: {x: 0, y: 1, z: 0}
   minimumDetectionRadiusAngle: -60
   maximumDetectionRadiusAngle: 80
 --- !u!114 &5601918533448924364
@@ -208,7 +209,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19c548cca3b422448a8d338399764eab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootingPoint: {fileID: 3891518066119536709}
 --- !u!195 &6890961638678366781
 NavMeshAgent:
   m_ObjectHideFlags: 0

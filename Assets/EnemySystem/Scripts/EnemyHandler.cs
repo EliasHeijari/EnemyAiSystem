@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyHandler : MonoBehaviour
@@ -21,6 +20,7 @@ public class EnemyHandler : MonoBehaviour
     [SerializeField] LayerMask playerLayer;
     [SerializeField] private float chaseRange = 8f;
     [SerializeField] private float attackRange = 4f;
+    [SerializeField] private Vector3 attackRangeOffset = Vector3.zero;
     [SerializeField] private float minimumDetectionRadiusAngle = -40f;
     [SerializeField] private float maximumDetectionRadiusAngle = 65f;
 
@@ -41,10 +41,10 @@ public class EnemyHandler : MonoBehaviour
                 movementHandler.Patrol(); 
                 break;
             case State.Chase:
-                movementHandler.Chase(Player.Instance.transform);
+                movementHandler.Chase(GetPlayerFromChaseRange().transform);
                 break;
             case State.Attack:
-                attackHandler.Shoot(Player.Instance.transform);
+                attackHandler.Attack(GetPlayerFromChaseRange().transform);
                 break;
         }
         if (playerLastSeenPos != Vector3.zero)
@@ -65,7 +65,7 @@ public class EnemyHandler : MonoBehaviour
         {
             if (state == State.Chase || state == State.Attack)
             {
-                playerLastSeenPos = Player.Instance.transform.position;
+                playerLastSeenPos = GetPlayerFromChaseRange().transform.position;
                 lastSeenPosDraw = playerLastSeenPos;
             }
             else playerLastSeenPos = Vector3.zero;
@@ -83,21 +83,27 @@ public class EnemyHandler : MonoBehaviour
         return false;
     }
     private bool PlayerOnAttackRange(){
-        if (Physics.CheckSphere(transform.position, attackRange, playerLayer))
+        if (Physics.CheckSphere(transform.position + attackRangeOffset, attackRange, playerLayer))
         {
-            return true; 
+            return true;
         }
         return false;
     }
     
     private bool IsPlayerOnSight(){
-        float distanceToPlayer = Vector3.Distance(transform.position, Player.Instance.transform.position);
-        Vector3 targetDirection = transform.position - Player.Instance.transform.position;
+
+        if (!PlayerOnChaseRange()) return false;
+
+        Player player = GetPlayerFromChaseRange();
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+        Vector3 targetDirection = transform.position - player.transform.position;
         float viewableAngle = Vector3.Angle(targetDirection, -transform.forward);
 
         float characterHeight = 2.5f;
+
         // Raycast now won't start from the floor
-        Vector3 playerStartPoint = new Vector3(Player.Instance.transform.position.x, characterHeight, Player.Instance.transform.position.z);
+        Vector3 playerStartPoint = new Vector3(player.transform.position.x, characterHeight, player.transform.position.z);
         Vector3 enemyStartPoint = new Vector3(transform.position.x, characterHeight, transform.position.z);
 
         Debug.DrawLine(playerStartPoint, enemyStartPoint, Color.yellow);
@@ -109,16 +115,32 @@ public class EnemyHandler : MonoBehaviour
         return isOnSight;
     }
 
+    private Player GetPlayerFromChaseRange()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, chaseRange, playerLayer);
+        foreach (Collider collider in colliders)
+        {
+            if (collider.TryGetComponent(out Player player))
+            {
+                return player;
+            }
+        }
+        return null;
+    }
+
 
     private void OnDrawGizmosSelected() {
         // Draw a yellow sphere, chase Range
         Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(transform.position, chaseRange);
-        // Draw a red sphere, attack Range
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position, attackRange);
+        Gizmos.DrawWireSphere(transform.position, chaseRange);
     }
     private void OnDrawGizmos() {
+
+        // Draw a red sphere, attack Range
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position + attackRangeOffset, attackRange);
+
+        // Draw Player Last Seen Position
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(lastSeenPosDraw, 1f);
     }

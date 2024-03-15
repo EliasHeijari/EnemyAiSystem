@@ -5,21 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour, IDamageable
 {
-    public static Player Instance;
-
     private int health = 100;
-    private void Start()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else if(Instance != this){
-            Destroy(this.gameObject);
-        }
-
-        DontDestroyOnLoad(this);
-    }
 
     public void TakeDamage(int damage)
     {

@@ -7,6 +7,10 @@ using UnityEngine.AI;
 public class EnemyMovementHandler : MonoBehaviour
 {
 
+    [Header("Settings")]
+    [SerializeField] private float walkingSpeed = 2f;
+    [SerializeField] private float runningSpeed = 3f;
+
     NavMeshAgent navMeshAgent;
     Vector3[] patrolPoints;
     Enemy enemy;
@@ -22,6 +26,7 @@ public class EnemyMovementHandler : MonoBehaviour
 
     public void Chase(Transform target)
     {
+        navMeshAgent.speed = runningSpeed;
         if (Vector3.Distance(transform.position, target.position) > 1f)
         {
         if (navMeshAgent.destination != target.position)
@@ -34,6 +39,7 @@ public class EnemyMovementHandler : MonoBehaviour
 
     public void Patrol()
     {
+        navMeshAgent.speed = walkingSpeed;
         if (!isMovingTo)
         {
             if (Vector3.Distance(transform.position, targetPos) > 1f)
@@ -52,6 +58,7 @@ public class EnemyMovementHandler : MonoBehaviour
     /// <param name="position"></param>
     public void MoveTo(Vector3 position)
     {
+        navMeshAgent.speed = walkingSpeed;
         isMovingTo = true;
         StartCoroutine(MoveCoroutine(position));
     }
