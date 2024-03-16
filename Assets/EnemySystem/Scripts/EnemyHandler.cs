@@ -47,8 +47,9 @@ public class EnemyHandler : MonoBehaviour
                 attackHandler.Attack(GetPlayerFromChaseRange().transform);
                 break;
         }
+        // Move to where player last seen
         if (playerLastSeenPos != Vector3.zero)
-            movementHandler.MoveTo(playerLastSeenPos);
+            movementHandler.MoveTo(playerLastSeenPos, true);
     }
 
     private void UpdateState()

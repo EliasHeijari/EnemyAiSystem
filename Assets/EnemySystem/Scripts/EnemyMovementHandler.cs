@@ -39,26 +39,29 @@ public class EnemyMovementHandler : MonoBehaviour
 
     public void Patrol()
     {
+        // MoveTo method is called and running, so dont do patrol
+        if (isMovingTo) return;
+
         navMeshAgent.speed = walkingSpeed;
-        if (!isMovingTo)
+
+        if (Vector3.Distance(transform.position, targetPos) > 1f)
         {
-            if (Vector3.Distance(transform.position, targetPos) > 1f)
-            {
-                navMeshAgent.SetDestination(targetPos);
-            }
-            else{
-                targetPos = patrolPoints[UnityEngine.Random.Range(0, patrolPoints.Length)];
-            }
+            navMeshAgent.SetDestination(targetPos);
         }
+        else{
+            targetPos = patrolPoints[UnityEngine.Random.Range(0, patrolPoints.Length)];
+        }
+        
     }
 
     /// <summary>
     /// move to given postion and ignores Patrol even when it's called
     /// </summary>
     /// <param name="position"></param>
-    public void MoveTo(Vector3 position)
+    public void MoveTo(Vector3 position, bool running = false)
     {
-        navMeshAgent.speed = walkingSpeed;
+        navMeshAgent.speed = running ? runningSpeed : walkingSpeed;
+
         isMovingTo = true;
         StartCoroutine(MoveCoroutine(position));
     }
@@ -70,7 +73,7 @@ public class EnemyMovementHandler : MonoBehaviour
         while (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
         {
             // You can perform checks or actions while the object is moving
-            
+
             yield return null;
         }
 
