@@ -11,6 +11,8 @@ public class EnemyMovementHandler : MonoBehaviour
     [SerializeField] private float walkingSpeed = 2f;
     [SerializeField] private float runningSpeed = 3f;
 
+    public float Speed { get { return navMeshAgent.speed; } }
+
     NavMeshAgent navMeshAgent;
     Vector3[] patrolPoints;
     Enemy enemy;
