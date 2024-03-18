@@ -43,5 +43,14 @@ public class Enemy : MonoBehaviour, IDamageable
         Debug.Log("enemy died");
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+
+        foreach (Transform patrolPoint in patrolPoints)
+        {
+            Gizmos.DrawSphere(patrolPoint.transform.position, 0.3f);
+        }
+    }
 
 }
