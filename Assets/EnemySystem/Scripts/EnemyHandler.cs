@@ -12,8 +12,8 @@ public class EnemyHandler : MonoBehaviour
     }
     State state;
     Enemy enemy;
-    EnemyAttackHandler attackHandler;
-    EnemyMovementHandler movementHandler;
+    public EnemyAttackHandler attackHandler {get; private set;}
+    public EnemyMovementHandler movementHandler {get; private set;}
 
     [Header("Detection Settings")]
     [Space(15)]
@@ -29,7 +29,7 @@ public class EnemyHandler : MonoBehaviour
     // For Drawing Gizmos
     Vector3 lastSeenPosDraw;
     
-    private void Start() {
+    private void Awake() {
         enemy = GetComponent<Enemy>();
         attackHandler = GetComponent<EnemyAttackHandler>();
         movementHandler = GetComponent<EnemyMovementHandler>();
